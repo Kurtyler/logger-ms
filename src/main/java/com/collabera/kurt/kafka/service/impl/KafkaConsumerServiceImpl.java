@@ -13,20 +13,28 @@ import java.util.Date;
 @Service
 public class KafkaConsumerServiceImpl implements KafkaConsumerService {
 
+    private static final String TOPIC = "productTopics";
+    private static final String GROUP_ID = "productTopicGroup";
+    private static final String CONTAINER_FACTORY = "productKafkaListenerContainerFactory";
+
     private final AuditLogRepository auditLogRepository;
 
     public KafkaConsumerServiceImpl(AuditLogRepository auditLogRepository) {
         this.auditLogRepository = auditLogRepository;
     }
 
-    @KafkaListener(topics = "productTopics",
-            groupId = "productTopicGroup",
-            containerFactory = "productKafkaListenerContainerFactory")
+    /**
+     * Kafka Consumer Service to listen on topic
+     * @param message
+     */
+    @KafkaListener(topics = TOPIC,
+            groupId = GROUP_ID,
+            containerFactory = CONTAINER_FACTORY)
     @Override
-    public void consumeProduct(String message) {
+    public void consumeProduct(final String message) {
         auditLogRepository.save(AuditLog.builder()
-        .dateCreated(new Date())
-        .logDetails(message).build());
-        log.info("Consumed Product, {}", message);
+                .dateCreated(new Date())
+                .logDetails(message).build());
+        log.info("Consumed from {}, {}", TOPIC, message);
     }
 }
