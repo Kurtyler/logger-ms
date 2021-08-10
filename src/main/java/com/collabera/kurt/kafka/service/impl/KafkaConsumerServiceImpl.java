@@ -3,6 +3,7 @@ package com.collabera.kurt.kafka.service.impl;
 import com.collabera.kurt.kafka.entity.AuditLog;
 import com.collabera.kurt.kafka.repository.AuditLogRepository;
 import com.collabera.kurt.kafka.service.KafkaConsumerService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import java.util.Date;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class KafkaConsumerServiceImpl implements KafkaConsumerService {
 
     private static final String TOPIC = "productTopics";
@@ -18,10 +20,6 @@ public class KafkaConsumerServiceImpl implements KafkaConsumerService {
     private static final String CONTAINER_FACTORY = "productKafkaListenerContainerFactory";
 
     private final AuditLogRepository auditLogRepository;
-
-    public KafkaConsumerServiceImpl(AuditLogRepository auditLogRepository) {
-        this.auditLogRepository = auditLogRepository;
-    }
 
     /**
      * Kafka Consumer Service to listen on topic
